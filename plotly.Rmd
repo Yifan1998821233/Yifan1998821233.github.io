@@ -11,26 +11,33 @@ output:
 We're gonna look at NYC Airbnb data. 
 
 ```{r}
-library(tidyverse)
+library(dplyr)
 library(p8105.datasets)
+library(rnoaa)
 library(plotly)
 library(htmlwidgets)
+library(tidyverse)
 ```
 
 
 ```{r}
-data("nyc_airbnb")
+weather_df = 
+  rnoaa::meteo_pull_monitors(
+    c("USW00094728", "USC00519397", "USS0023B17S"),
+    var = c("PRCP", "TMIN", "TMAX"), # temperature min and max
+    date_min = "2017-01-01",
+    date_max = "2017-12-31") %>%
+  mutate( # change names of variables in id column.
+    name = recode(
+      id, 
+      USW00094728 = "CentralPark_NY", 
+      USC00519397 = "Waikiki_HA",
+      USS0023B17S = "Waterhole_WA"),
+    tmin = tmin / 10,
+    tmax = tmax / 10) %>%
+  select(name, id, everything())
 
-nyc_airbnb = 
-  nyc_airbnb %>% 
-  mutate(rating = review_scores_location / 2) %>% 
-  select(neighbourhood_group, neighbourhood, rating, price, room_type, lat, long) %>% 
-  filter(
-    neighbourhood_group == "Manhattan",
-    price %in% 100:500, # some where in between 100 and 500
-    room_type == "Entire home/apt"
-  ) %>% 
-  drop_na(rating)
+weather_df
 ```
 
 
@@ -39,44 +46,47 @@ nyc_airbnb =
 ## scatterplot
 
 ```{r}
-nyc_airbnb %>% 
-  mutate(text_label = str_c("Price: $", price, "\nRating: ", rating)) %>% # add a lable fre to the text in the variable. "\n" means another line. Price: $200, Rating: 5
+weather_df %>% 
+  mutate(tchange = tmax - tmin) %>% 
   plot_ly(
-    x = ~lat, y = ~long, color = ~price, text = ~text_label, 
-    alpha = .5, type = "scatter", mode = "markers")
+    x = ~tchange, y = ~tmin, color = ~name,
+    alpha = .5, type = "scatter", mode = "markers", colors = "viridis") %>% 
+  layout(
+    xaxis = list(title = "Temperature change (C)"),
+    yaxis = list(title = "Lowest Temperature (C)"),
+    title = "Relationships between Temp change and the Lowest Temp"
+  )
 ```
 
 ## boxplot
 
 ```{r}
-nyc_airbnb %>% 
-  mutate(neighbourhood = fct_reorder(neighbourhood, price)) %>% 
+weather_df %>% 
+  mutate(
+    name = factor(name),
+    name = forcats::fct_relevel(name, c("Waikiki_HA"))) %>% 
   plot_ly(
-    y = ~price, x = ~neighbourhood, color = ~neighbourhood,
-    type = "box", colors = "viridis")
+    x = ~name, y = ~tmin, color = ~name,
+    type = "box", colors = "viridis") %>% 
+  layout(
+    xaxis = list(title = "Locations"),
+    yaxis = list(title = "Lowest Temperature (C)"),
+    title = "Lowest Temp of Locations"
+  )
 ```
 
 ## bar plot
 
 ```{r}
-nyc_airbnb %>% 
-  count(neighbourhood) %>% 
-  mutate(neighbourhood = fct_reorder(neighbourhood, n)) %>% 
+weather_df %>% 
+  
   plot_ly(
-    x = ~neighbourhood, y = ~n, color = ~neighbourhood, 
-    type = "bar", colors = "viridis")
+    x = ~prcp, y = ~n, color = ~name,
+    type = "bar", colors = "viridis"
+  )
 ```
 
 
-# ggplotly
 
-```{r}
-ggp_scatter = 
-  nyc_airbnb %>% 
-  ggplot(aes(x = lat, y = long, color = price)) + 
-  geom_point()
-
-ggplotly(ggp_scatter) # It's a tricky thing when you want to know some simgle point when tidying your data.
-```
 
 

@@ -6,7 +6,38 @@ output:
     toc_float: true
 ---
 
-# This page has information about me
+# Professional Information of Yifan
 
-I teach p8105.
+## Education
 
+**Columbia University Mailman School of Public Health**<br>
+Sep. 2020-May. 2022<br>
+Master of Biostatistics (BM)<br>
+
+**SUNY College of Environmental Science and Forestry (ESF)**<br>
+Sept. 2019-May. 2020<br>
+Bachelor of Science in Bioprocess Engineering (BPE) (“3+1” joint program with BUCT)<br>
+
+**Beijing University of Chemical Technology (BUCT) **<br>
+Sept. 2016-Jun. 2020<br>
+Bachelor of Science in Biological Engineering (CCE)<br>
+
+## Research Experience
+
+* **Student Researcher, Independent Literature Review** <br>
+Jul. 2019-Nov. 2019<br>
+Faculty Mentor: Qianjin Guo<br>
+Article title: The Molecular Mechanism and Drug Therapy of Heart Failure<br>
+Publication: Journal of Environmental Science and Development, Accepted; 6, November 2019
+
+## Internship Experience
+
+* **Technical Standard Interpreter, Equipment & Material Dept.** <br>
+Jul. 2019-Aug. 2019<br>
+DNV GL China, Changning District, Shanghai, China<br>
+
+## Leadership and Campus Involvement
+
+* **Table Tennis School Team, BUCT, Beijing, China**<br>
+Feb. 2017-Jun. 2019<br>
+President
