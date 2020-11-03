@@ -1,14 +1,14 @@
 ---
-title: "Plotly Plots of data NOAA"
+title: "Dashboard"
 output: 
-  html_document:
-    toc: true
-    toc_float: true
+  flexdashboard::flex_dashboard:
+    orientation: columns
+    vertical_layout: fill
+    source: embed
 ---
 
-# Load and tidy the data
-
 ```{r setup, include=FALSE}
+library(flexdashboard)
 library(dplyr)
 library(p8105.datasets)
 library(rnoaa)
@@ -17,9 +17,7 @@ library(htmlwidgets)
 library(tidyverse)
 ```
 
-
-```{r warning=FALSE, message=FALSE, collapse=TRUE}
-# Tidy the data and have the weather_df
+```{r}
 weather_df = 
   rnoaa::meteo_pull_monitors(
     c("USW00094728", "USC00519397", "USS0023B17S"),
@@ -35,17 +33,14 @@ weather_df =
     tmin = tmin / 10,
     tmax = tmax / 10) %>%
   select(name, id, everything())
-
-head(weather_df)
 ```
 
+Column {data-width=550}
+-----------------------------------------------------------------------
 
-# Plotly plots
+### scatterplot: Relationships between Temp change and the Lowest Temp
 
-## scatterplot
-
-```{r scatter, warning=FALSE, message=FALSE}
-# Find the relationships between the lowest temp and temp changes (tmax - tmin)
+```{r}
 weather_df %>% 
   mutate(tchange = tmax - tmin) %>% 
   plot_ly(
@@ -58,10 +53,12 @@ weather_df %>%
   )
 ```
 
-## boxplot
+Column {data-width=450}
+-----------------------------------------------------------------------
 
-```{r box, warning=FALSE, message=FALSE}
-# Find the lowest temp of each locations
+### boxplot: Lowest Temperature of Locations
+
+```{r}
 weather_df %>% 
   mutate(
     name = factor(name),
@@ -76,10 +73,9 @@ weather_df %>%
   )
 ```
 
-## bar plot
+### bar plot: Mean Precipitation per Month
 
-```{r bar, warning=FALSE, message=FALSE}
-# Find the average precipitation value per month
+```{r}
 weather_df %>% 
   separate(date, into = c("year", "month", "day")) %>% 
   group_by(year, month, name) %>% 
@@ -93,11 +89,7 @@ weather_df %>%
    layout(
     xaxis = list(title = "Month"),
     yaxis = list(title = "Mean Precipitation (mm)"),
-    title = "Mean precipitation per month"
+    title = "Mean Precipitation per Month"
   )
 ```
-
-
-
-
 

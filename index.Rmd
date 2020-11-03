@@ -10,7 +10,7 @@ output:
 # General Information about Yifan 
 
 Yifan is a graduate BS student major in Biostatistics at Columbia Mailman school of public health.
-
+<br/>
 
 # Yifan's Photos
 
